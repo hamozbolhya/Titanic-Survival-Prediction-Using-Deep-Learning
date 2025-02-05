@@ -24,8 +24,8 @@ It contains:
 ## 🚀 Installation Guide
 1. **Clone the repository** (if using Git):
    ```bash
-   git clone https://github.com/your-repo-name.git
-   cd DeepLearning_Project
+   git clone https://github.com/hamozbolhya/Titanic-Survival-Prediction-Using-Deep-Learning
+   cd Titanic-Survival-Prediction-Using-Deep-Learning
 
 
 Install dependencies:
