@@ -1,0 +1,57 @@
+import pandas as pd
+import numpy as np
+import seaborn as sns
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler, LabelEncoder
+
+def load_and_preprocess_data():
+    """
+    Load the Titanic dataset, clean, encode, normalize, and split it into train, validation, and test sets.
+
+    Returns:
+    - X_train, X_valid, X_test: Processed feature sets.
+    - y_train, y_valid, y_test: Corresponding target labels.
+    - input_shape: Number of input features for the ANN model.
+    """
+
+    # Load dataset
+    df = sns.load_dataset('titanic')
+    df = sns.load_dataset('titanic')
+
+    # Drop rows where the target (survived) is missing
+    df = df.dropna(subset=['survived'])
+
+    # Fill missing values
+    df['age'].fillna(df['age'].median(), inplace=True)
+    df['fare'].fillna(df['fare'].median(), inplace=True)
+    df['embark_town'].fillna(df['embark_town'].mode()[0], inplace=True)
+
+    # Encode categorical variables
+    encoder = LabelEncoder()
+    df['sex'] = encoder.fit_transform(df['sex'])  # 'male' → 1, 'female' → 0
+    df['embark_town'] = encoder.fit_transform(df['embark_town'])
+
+    # Select features and target variable
+    features = ['pclass', 'sex', 'age', 'fare', 'embark_town']
+    target = 'survived'
+    df = df[features + [target]]
+
+    # Convert to float32 for TensorFlow compatibility
+    df = df.astype(np.float32)
+
+    # Split into features and labels
+    X = df.drop(columns=['survived'])
+    y = df['survived']
+
+    # Split into training (70%), validation (20%), and test (10%)
+    X_train, X_temp, y_train, y_temp = train_test_split(X, y, test_size=0.3, random_state=42)
+    X_valid, X_test, y_valid, y_test = train_test_split(X_temp, y_temp, test_size=0.5, random_state=42)
+
+    # Normalize data
+    scaler = StandardScaler()
+    X_train = scaler.fit_transform(X_train)
+    X_valid = scaler.transform(X_valid)
+    X_test = scaler.transform(X_test)
+
+    # Return processed datasets and input shape
+    return X_train, X_valid, X_test, y_train, y_valid, y_test, X_train.shape[1]

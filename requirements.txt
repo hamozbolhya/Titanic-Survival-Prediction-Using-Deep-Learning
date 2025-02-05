@@ -1,0 +1,10 @@
+#pip install -r requirements.txt   if you need to install all requirement
+
+numpy
+pandas
+matplotlib
+seaborn
+scikit-learn
+tensorflow
+keras
+jupyter
